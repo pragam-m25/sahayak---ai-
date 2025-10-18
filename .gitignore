@@ -1,0 +1,12 @@
+# ===============
+# SECRET FILES
+# ===============
+# Is file mein hamari API key hai, isey KABHI upload mat karna
+config.js
+*.env
+
+# ===============
+# SYSTEM JUNK
+# ===============
+.DS_Store
+Thumbs.db
