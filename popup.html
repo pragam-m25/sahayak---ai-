@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sahayak AI - Your Emergency Co-pilot</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+  <style>
+    /* --- CSS Variables for a Sleek Theme --- */
+    :root {
+      --primary-color: #3C66E7;
+      --primary-hover: #3358C5;
+      --background-gradient: linear-gradient(135deg, #F5F7FA 0%, #E8F0FE 100%);
+      --text-color-primary: #1F2937;
+      --text-color-secondary: #4B5563;
+      --card-bg: rgba(255, 255, 255, 0.7); /* Glass Effect */
+      --card-border: rgba(255, 255, 255, 0.9);
+      --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+      --border-radius: 16px;
+    }
+    
+    /* --- Main Body and Layout --- */
+    body {
+      width: 600px;
+      font-family: 'Inter', sans-serif;
+      background: var(--background-gradient);
+      color: var(--text-color-primary);
+      margin: 0;
+      padding: 25px;
+      box-sizing: border-box;
+      backdrop-filter: blur(10px); /* Background blur for glass effect */
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+    }
+    
+    /* --- Animations --- */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* --- Glassmorphism Card Style --- */
+    .card {
+      background: var(--card-bg);
+      padding: 30px;
+      border-radius: var(--border-radius);
+      border: 1px solid var(--card-border);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      animation: fadeIn 0.5s ease-out forwards;
+      opacity: 0;
+    }
+    .card:nth-child(1) { animation-delay: 0.1s; }
+    .card:nth-child(2) { animation-delay: 0.2s; }
+    .card:nth-child(3) { animation-delay: 0.3s; }
+    .card:nth-child(4) { animation-delay: 0.4s; }
+
+    /* --- Typography --- */
+    h1, h2, h3 {
+      text-align: center;
+      margin: 0 0 15px 0;
+    }
+    h1 { font-size: 2.2em; color: var(--primary-color); font-weight: 700; }
+    h2 { font-size: 1.2em; color: var(--text-color-secondary); font-weight: 400; }
+    h3 { font-size: 1.6em; color: var(--text-color-primary); font-weight: 600; border-bottom: 2px solid var(--primary-color); padding-bottom: 10px; }
+
+    /* --- Interactive Elements --- */
+    textarea {
+      width: calc(100% - 24px); padding: 12px; border: 1px solid #D1D5DB;
+      border-radius: 8px; resize: vertical; font-size: 1rem; font-family: 'Inter', sans-serif;
+      margin-bottom: 15px; transition: all 0.2s ease;
+    }
+    textarea:focus { border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(60, 102, 231, 0.2); outline: none; }
+
+    button {
+      width: 100%; padding: 14px; background: var(--primary-color); color: white; border: none;
+      border-radius: 8px; cursor: pointer; font-size: 1.1rem; font-weight: bold;
+      transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; gap: 10px;
+    }
+    button:hover { background: var(--primary-hover); transform: translateY(-3px); box-shadow: 0 4px 15px rgba(60, 102, 231, 0.3); }
+
+    #response {
+      margin-top: 20px; padding: 15px; background: #F3F4F6; border-left: 5px solid var(--primary-color);
+      border-radius: 0 8px 8px 0; min-height: 80px; white-space: pre-wrap; font-size: 1rem; line-height: 1.7;
+    }
+    #loader { display: none; text-align: center; margin-top: 20px; font-size: 1.1em; color: var(--text-color-secondary); }
+
+    /* --- Upgraded Table Styling --- */
+    table {
+      width: 100%; border-collapse: separate; border-spacing: 0; margin-top: 25px;
+      table-layout: fixed;
+    }
+    caption {
+      font-size: 1.4em; font-weight: bold; margin-bottom: 20px; color: var(--text-color-primary);
+    }
+    th, td {
+      padding: 18px; text-align: left; vertical-align: top;
+      border-bottom: 1px solid #E5E7EB;
+      word-wrap: break-word;
+    }
+    th {
+      background-color: var(--primary-color); color: white; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 1px;
+    }
+    th:first-child { border-top-left-radius: 12px; }
+    th:last-child { border-top-right-radius: 12px; }
+    tr:last-child td:first-child { border-bottom-left-radius: 12px; }
+    tr:last-child td:last-child { border-bottom-right-radius: 12px; }
+    tr:last-child td { border-bottom: none; }
+    tbody tr:hover { background-color: var(--secondary-color); }
+    
+    ul, ol { margin: 0; padding-left: 20px; }
+    li { margin-bottom: 8px; }
+    .icon { margin-right: 12px; color: var(--primary-color); width: 24px; text-align: center;}
+  </style>
+</head>
+<body>
+<div class="container">
+  
+  <header class="card">
+    <h1><i class="fas fa-hand-holding-heart icon"></i>Sahayak AI</h1>
+    <h2>Your Intelligent Co-pilot in Any Emergency</h2>
+  </header>
+
+  <main class="card">
+    <h3><i class="fas fa-question-circle icon"></i>Get Instant AI Guidance</h3>
+    <textarea id="promptInput" rows="4" placeholder="e.g., 'What are the first aid steps for a burn?'"></textarea>
+    <button id="askButton"><i class="fas fa-bolt"></i> Ask Sahayak</button>
+    <div id="response">AI's answer will appear here...</div>
+    <div id="loader"><i class="fas fa-spinner fa-spin"></i> Analyzing... Please wait...</div>
+  </main>
+ 
+  <section class="card">
+    <h3><i class="fas fa-lightbulb icon"></i>Essential Safety Protocols</h3>
+    <table>
+      <caption>Safety Tips & Emergency Contacts</caption>
+      <thead>
+        <tr>  
+          <th><i class="fas fa-shield-alt"></i> Key Safety Tips</th> 
+          <th><i class="fas fa-phone-alt"></i> National Emergency Contacts</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td> 
+            <ol>
+              <li>Stay calm and assess the situation.</li>
+              <li>Always prioritize personal safety first.</li>
+              <li>Have a well-stocked emergency kit.</li>
+              <li>Know your evacuation routes beforehand.</li>
+              <li>Listen to and follow official alerts.</li>
+              <li>Help others only when it's safe for you.</li>
+            </ol>
+          </td>
+          <td>
+            <ul>
+              <li><strong>All-in-One Emergency:</strong> 112</li>
+              <li><strong>Police:</strong> 100</li>
+              <li><strong>Fire Department:</strong> 101</li>
+              <li><strong>Ambulance:</strong> 108</li>
+              <li><strong>Child Helpline:</strong> 1098</li>
+              <li><strong>Women Helpline:</strong> 1091</li>
+            </ul>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="card">
+    <h3><i class="fas fa-info-circle icon"></i>Disaster Specific Information</h3>
+    <table>
+      <caption>Volcano / ज्वालामुखी</caption>
+      <thead>
+        <tr><th><i class="fas fa-globe-americas"></i> English</th><th><i class="fas fa-language"></i> हिंदी</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td> <strong>Before a Volcanic Eruption</strong>
+            <ul>
+              <li>Stay informed: Listen to official warnings.</li>
+              <li>Prepare an emergency kit: Water, food, mask, first-aid.</li>
+              <li>Know evacuation routes and safe shelters.</li>
+              <li>Protect your house: Seal windows/doors, reinforce roofs.</li>
+            </ul>
+            <strong>During a Volcanic Eruption</strong>
+            <ul>
+              <li>Follow official instructions; evacuate if told to.</li>
+              <li>Stay indoors if not evacuating; close all openings.</li>
+              <li>Use masks to cover nose and mouth to avoid ash inhalation.</li>
+              <li>Protect eyes with goggles; avoid contact lenses.</li>
+              <li>Stay away from rivers and streams (mudflows).</li>
+              <li>Do not drive unless necessary (ash reduces visibility).</li>
+            </ul>
+            <strong>After a Volcanic Eruption</strong>
+            <ul>
+              <li>Wait for official “all clear” before returning home.</li>
+              <li>Avoid ash-covered areas.</li>
+              <li>Clean roofs carefully (ash is heavy).</li>
+              <li>Wear protective gear while cleaning ash.</li>
+              <li>Boil or filter water before drinking.</li>
+              <li>Help neighbors, especially vulnerable groups.</li>
+            </ul>
+          </td>
+          <td>
+            <strong>ज्वालामुखी विस्फोट से बचाव के उपाय</strong>
+            <ul>
+              <li>सुरक्षित निकासी मार्ग और शरण स्थल पहले से तय कर लो।</li>
+              <li>रेडियो/टीवी से सरकार द्वारा दी गई चेतावनियों पर ध्यान दो।</li>
+              <li>आपातकालीन किट तैयार रखो – टॉर्च, मास्क, पानी, भोजन, प्राथमिक उपचार।</li>
+              <li>धूल से बचने के लिए मास्क और चश्मा साथ रखो।</li>
+            </ul>
+            <strong>विस्फोट के दौरान</strong>
+            <ul>
+              <li>ज्वालामुखी के पास बिल्कुल मत जाओ, तुरंत सुरक्षित स्थान पर चले जाओ।</li>
+              <li>सरकार या प्रशासन के निकासी आदेश का पालन करो।</li>
+              <li>खिड़कियाँ और दरवाज़े बंद रखो ताकि राख (ash) अंदर न आ सके।</li>
+              <li>मास्क या गीले कपड़े से मुँह और नाक को ढककर सांस लो।</li>
+              <li>गाड़ी चलाने से बचो, राख से सड़क फिसलन भरी और इंजन खराब हो सकता है।</li>
+            </ul>
+            <strong>विस्फोट के बाद</strong>
+            <ul>
+              <li>प्रशासन द्वारा "सुरक्षित" घोषित किए जाने के बाद ही घर वापस जाओ।</li>
+              <li>राख को सावधानी से साफ करो (गीले कपड़े/पानी से), झाड़ू से सूखी सफाई मत करो।</li>
+              <li>पीने का पानी छानकर या उबालकर इस्तेमाल करो, क्योंकि पानी दूषित हो सकता है।</li>
+              <li>घायल और प्रभावित लोगों की मदद करो।</li>
+            </ul>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <br>
+    <table>
+      <caption>Floods / बाढ़</caption>
+      <thead>
+        <tr><th><i class="fas fa-globe-americas"></i> English</th><th><i class="fas fa-language"></i> हिंदी</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td> <strong>Before a Flood</strong>
+            <ul>
+              <li>Stay informed: Monitor weather reports and flood warnings.</li>
+              <li>Prepare emergency kit: Water, food, flashlight, radio, first-aid.</li>
+              <li>Know evacuation routes: Identify higher ground and safe shelters.</li>
+              <li>Secure your home: Move valuables to higher floors, turn off utilities.</li>
+            </ul>
+            <strong>During a Flood</strong>
+            <ul>
+              <li>Evacuate immediately if told by authorities.</li>
+              <li>Never walk or drive through flood water - "Turn Around, Don't Drown".</li>
+              <li>Stay away from downed power lines.</li>
+              <li>Seek higher ground immediately.</li>
+            </ul>
+            <strong>After a Flood</strong>
+            <ul>
+              <li>Wait for authorities to declare area safe.</li>
+              <li>Avoid flood water - it may be contaminated.</li>
+              <li>Document damage with photos for insurance.</li>
+              <li>Clean and disinfect everything that got wet.</li>
+            </ul>
+          </td>
+          <td>
+            <strong>बाढ़ से बचाव के उपाय</strong>
+            <ul>
+              <li>मौसम की जानकारी और बाढ़ की चेतावनी पर ध्यान दो।</li>
+              <li>आपातकालीन किट तैयार रखो – पानी, खाना, टॉर्च, रेडियो।</li>
+              <li>घर के महत्वपूर्ण सामान ऊंची जगह पर रखो।</li>
+            </ul>
+            <strong>बाढ़ के दौरान</strong>
+            <ul>
+              <li>प्रशासन के निकासी आदेश का पालन करो।</li>
+              <li>बाढ़ के पानी में कभी मत चलो या गाड़ी मत चलाओ।</li>
+              <li>टूटी बिजली की तारों से दूर रहो।</li>
+              <li>तुरंत ऊँची जगह पर जाओ।</li>
+            </ul>
+            <strong>बाढ़ के बाद</strong>
+            <ul>
+              <li>प्रशासन द्वारा सुरक्षित घोषित करने के बाद ही घर वापस जाओ।</li>
+              <li>नुकसान की तस्वीरें लो बीमा के लिए।</li>
+              <li>सब कुछ साफ और कीटाणुरहित करो।</li>
+            </ul>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+     <br>
+    <table>
+      <caption>Earthquake / भूकंप</caption>
+      <thead>
+        <tr><th><i class="fas fa-globe-americas"></i> English</th><th><i class="fas fa-language"></i> हिंदी</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td> <strong>Before an Earthquake</strong>
+            <ul>
+              <li>Secure heavy furniture to walls.</li>
+              <li>Keep emergency supplies accessible.</li>
+              <li>Identify safe spots in each room (under sturdy tables).</li>
+              <li>Practice "Drop, Cover, and Hold On".</li>
+            </ul>
+            <strong>During an Earthquake</strong>
+            <ul>
+              <li>If indoors, Drop, Cover, and Hold On. Stay away from windows.</li>
+              <li>If outdoors, move to an open area away from buildings and power lines.</li>
+              <li>If in a vehicle, pull over to a clear spot and stop.</li>
+            </ul>
+            <strong>After an Earthquake</strong>
+            <ul>
+              <li>Check yourself and others for injuries.</li>
+              <li>Expect aftershocks.</li>
+              <li>Check for structural damage, gas leaks, or fire hazards.</li>
+              <li>Listen to emergency information via radio or phone.</li>
+            </ul>
+          </td>
+          <td>
+            <strong>भूकंप से बचाव के उपाय</strong>
+            <ul>
+              <li>भारी फर्नीचर को दीवारों से सुरक्षित करें।</li>
+              <li>आपातकालीन सामान आसानी से पहुँच में रखें।</li>
+              <li>प्रत्येक कमरे में सुरक्षित स्थान (मजबूत मेजों के नीचे) पहचानें।</li>
+              <li>"झुको, ढको, और पकड़े रहो" का अभ्यास करें।</li>
+            </ul>
+            <strong>भूकंप के दौरान</strong>
+            <ul>
+              <li>यदि घर के अंदर हों, तो झुको, ढको, और पकड़े रहो। खिड़कियों से दूर रहें।</li>
+              <li>यदि बाहर हों, तो इमारतों और बिजली की लाइनों से दूर खुले क्षेत्र में चले जाएं।</li>
+              <li>यदि वाहन में हों, तो एक साफ जगह पर रुकें।</li>
+            </ul>
+            <strong>भूकंप के बाद</strong>
+            <ul>
+              <li>अपनी और दूसरों की चोटों की जांच करें।</li>
+              <li>आफ्टरशॉक्स की उम्मीद रखें।</li>
+              <li>संरचनात्मक क्षति, गैस लीक या आग के खतरों की जांच करें।</li>
+              <li>रेडियो या फोन के माध्यम से आपातकालीन जानकारी सुनें।</li>
+            </ul>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+     <br>
+    <table>
+      <caption>Tsunami / सुनामी</caption>
+      <thead>
+        <tr><th><i class="fas fa-globe-americas"></i> English</th><th><i class="fas fa-language"></i> हिंदी</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td> <strong>Before a Tsunami</strong>
+            <ul>
+              <li>If near the coast, know your community's evacuation routes.</li>
+              <li>Identify high ground or a safe place inland.</li>
+              <li>Prepare an emergency kit with essentials.</li>
+              <li>Know the natural warning signs: strong earthquake, loud ocean roar, unusual ocean behavior.</li>
+            </ul>
+            <strong>During a Tsunami</strong>
+            <ul>
+              <li>If you feel an earthquake, "Drop, Cover, and Hold On."</li>
+              <li>Move immediately to higher ground as soon as shaking stops.</li>
+              <li>Do not wait for an official warning.</li>
+              <li>Stay away from the coast, even if you see small waves.</li>
+              <li>If caught in a tsunami, grab onto something that floats.</li>
+            </ul>
+            <strong>After a Tsunami</strong>
+            <ul>
+              <li>Listen to local authorities for "all clear" messages.</li>
+              <li>Stay away from damaged areas.</li>
+              <li>Be aware of aftershocks and secondary hazards.</li>
+              <li>Help others, especially those in need.</li>
+            </ul>
+          </td>
+          <td>
+            <strong>सुनामी से बचाव के उपाय</strong>
+            <ul>
+              <li>यदि तट के पास हैं, तो अपने समुदाय के निकासी मार्गों को जानें।</li>
+              <li>ऊंची भूमि या अंतर्देशीय सुरक्षित स्थान पहचानें।</li>
+              <li>जरूरी सामान के साथ एक आपातकालीन किट तैयार करें।</li>
+              <li>प्राकृतिक चेतावनी संकेतों को जानें: जोरदार भूकंप, समुद्र की तेज गर्जना, असामान्य समुद्री व्यवहार।</li>
+            </ul>
+            <strong>सुनामी के दौरान</strong>
+            <ul>
+              <li>यदि आपको भूकंप महसूस हो, तो "झुको, ढको, और पकड़े रहो।"</li>
+              <li>जैसे ही हिलना बंद हो, तुरंत ऊंची भूमि पर चले जाएं।</li>
+              <li>आधिकारिक चेतावनी का इंतजार न करें।</li>
+              <li>तट से दूर रहें, भले ही आपको छोटी लहरें दिखें।</li>
+              <li>यदि सुनामी में फंस जाएं, तो किसी तैरती हुई चीज़ को पकड़ लें।</li>
+            </ul>
+            <strong>सुनामी के बाद</strong>
+            <ul>
+              <li>स्थानीय अधिकारियों से "सब ठीक है" संदेशों के लिए सुनें।</li>
+              <li>क्षतिग्रस्त क्षेत्रों से दूर रहें।</li>
+              <li>आफ्टरशॉक्स और अन्य खतरों के प्रति सचेत रहें।</li>
+              <li>दूसरों की मदद करें, खासकर जरूरतमंदों की।</li>
+            </ul>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+  
+</div>
+<script src="config.js"></script>
+<script src="popup.js"></script>
+</body>
+</html>
